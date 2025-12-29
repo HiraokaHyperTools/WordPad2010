@@ -206,6 +206,9 @@
 #define ID_PEN_TOGGLE                   32812
 #define ID_PEN_LENS                     32813
 #define ID_PEN_TAB                      32814
+#define ID_MS_MINCHO_11PT               32815
+#define ID_MS_PGOTHIC_10PT              32816
+#define ID_MS_UI_GOTHIC_10PT            32817
 #define ID_VIEW_FORMATBAR               59396
 #define ID_VIEW_RULER                   59397
 

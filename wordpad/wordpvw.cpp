@@ -137,6 +137,9 @@ BEGIN_MESSAGE_MAP(CWordPadView, CRichEditView)
 	ON_NOTIFY(NM_SETFOCUS, ID_VIEW_FORMATBAR, OnBarSetFocus)
 	ON_NOTIFY(NM_KILLFOCUS, ID_VIEW_FORMATBAR, OnBarKillFocus)
 	ON_NOTIFY(NM_RETURN, ID_VIEW_FORMATBAR, OnBarReturn)
+	ON_COMMAND_EX(ID_MS_MINCHO_11PT, OnSetUserFont)
+	ON_COMMAND_EX(ID_MS_PGOTHIC_10PT, OnSetUserFont)
+	ON_COMMAND_EX(ID_MS_UI_GOTHIC_10PT, OnSetUserFont)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -829,4 +832,34 @@ void CWordPadView::OnBarKillFocus(NMHDR*, LRESULT*)
 void CWordPadView::OnBarReturn(NMHDR*, LRESULT* )
 {
 	SetFocus();
+}
+
+BOOL CWordPadView::OnSetUserFont(UINT nID)
+{
+	CString fontName;
+	int fontSizeInPt;
+	switch (nID)
+	{
+	case ID_MS_MINCHO_11PT:
+		fontName = _T("‚l‚r –¾’©");
+		fontSizeInPt = 11;
+		break;
+	case ID_MS_PGOTHIC_10PT:
+		fontName = _T("‚l‚r ‚oƒSƒVƒbƒN");
+		fontSizeInPt = 10;
+		break;
+	case ID_MS_UI_GOTHIC_10PT:
+		fontName = _T("MS UI Gothic");
+		fontSizeInPt = 10;
+		break;
+	default:
+		return FALSE;
+	}
+
+	CCharFormat cf;
+	cf.dwMask = CFM_FACE | CFM_SIZE;
+	_tcscpy_s(cf.szFaceName, LF_FACESIZE, fontName);
+	cf.yHeight = fontSizeInPt * 20; // in twips
+	SetCharFormat(cf);
+	return TRUE;
 }

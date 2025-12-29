@@ -11,10 +11,11 @@
 ;--------------------------------
 
 !define APP "WordPad2010"
-!define BINDIR64 "wordpad\amd64\Release"
+!define BINDIRARM64 "ARM64\Release"
+!define BINDIRAMD64 "wordpad\amd64\Release"
 !define BINDIR32 "wordpad\Release"
 
-!system 'MySign "${BINDIR32}\WordPad.exe" "${BINDIR64}\WordPad.exe"'
+!system 'MySign "${BINDIR32}\WordPad.exe" "${BINDIRAMD64}\WordPad.exe" "${BINDIRARM64}\WordPad.exe"'
 !finalize 'MySign "%1"'
 
 ; The name of the installer
@@ -38,12 +39,15 @@ InstallDirRegKey HKLM "Software\${APP}" "Install_Dir"
 
 XPStyle on
 
+!include "LogicLib.nsh"
+!include "x64.nsh"
+
 ;--------------------------------
 
 ; Pages
 
-Page components
 Page directory
+Page components
 Page instfiles
 
 UninstPage uninstConfirm
@@ -60,7 +64,14 @@ Section ""
   SetOutPath $INSTDIR
   
   ; Put file there
-  File "${BINDIR64}\WordPad.exe"
+  SetOutPath $INSTDIR
+  File "${BINDIR32}\WordPad.exe"
+  SetOutPath $INSTDIR\AMD64
+  File "${BINDIRAMD64}\WordPad.exe"
+  SetOutPath $INSTDIR\ARM64
+  File "${BINDIRARM64}\WordPad.exe"
+  
+  SetOutPath $INSTDIR
   
   ; Write the installation path into the registry
   WriteRegStr HKLM "SOFTWARE\${APP}" "Install_Dir" "$INSTDIR"
@@ -76,12 +87,24 @@ SectionEnd
 
 SectionGroup "AMD64"
 
-Section "WordPad.exe"
-  File "${BINDIR64}\WordPad.exe"
+Section /o "WordPad.exe" WORDPAD_X64
+  File "${BINDIRAMD64}\WordPad.exe"
 SectionEnd
 
-Section "Create write.exe"
-  File "/oname=$WINDIR\write.exe" "${BINDIR64}\WordPad.exe"
+Section /o "Create write.exe" WRITE_X64
+  File "/oname=$WINDIR\write.exe" "${BINDIRAMD64}\WordPad.exe"
+SectionEnd
+
+SectionGroupEnd
+
+SectionGroup "ARM64"
+
+Section /o "WordPad.exe" WORDPAD_ARM64
+  File "${BINDIRARM64}\WordPad.exe"
+SectionEnd
+
+Section /o "Create write.exe" WRITE_ARM64
+  File "/oname=$WINDIR\write.exe" "${BINDIRARM64}\WordPad.exe"
 SectionEnd
 
 SectionGroupEnd
@@ -106,6 +129,18 @@ Section "Start Menu Shortcuts"
   CreateShortcut "$SMPROGRAMS\${APP}\WordPad.lnk" "$INSTDIR\WordPad.exe"
 
 SectionEnd
+
+Function .onInit
+  ${If} ${IsNativeAMD64}
+    SectionSetFlags ${WORDPAD_X64} ${SF_SELECTED}
+    SectionSetFlags ${WRITE_X64} ${SF_SELECTED}
+  ${EndIf}
+
+  ${If} ${IsNativeARM64}
+    SectionSetFlags ${WORDPAD_ARM64} ${SF_SELECTED}
+    SectionSetFlags ${WRITE_ARM64} ${SF_SELECTED}
+  ${EndIf}
+FunctionEnd
 
 ;--------------------------------
 

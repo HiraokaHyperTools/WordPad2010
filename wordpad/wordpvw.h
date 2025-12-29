@@ -99,6 +99,7 @@ protected:
 	afx_msg void OnBarSetFocus(NMHDR*, LRESULT*);
 	afx_msg void OnBarKillFocus(NMHDR*, LRESULT*);
 	afx_msg void OnBarReturn(NMHDR*, LRESULT* );
+	afx_msg BOOL OnSetUserFont(UINT nID);
 	DECLARE_MESSAGE_MAP()
 };
 
