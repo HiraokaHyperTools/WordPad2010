@@ -1,4 +1,4 @@
-// wordpvw.cpp : implementation of the CWordPadView class
+Ôªø// wordpvw.cpp : implementation of the CWordPadView class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -450,6 +450,16 @@ int CWordPadView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GetDefaultFont(m_defTextCharFormat, IDS_DEFAULTTEXTFONT);
 	GetDefaultFont(m_defCharFormat, IDS_DEFAULTFONT);
 
+	// Change the default font family to `Ôº≠Ôº≥ ÊòéÊúù`
+	_tcsncpy_s(m_defCharFormat.szFaceName, LF_FACESIZE, _T("Ôº≠Ôº≥ ÊòéÊúù"), _TRUNCATE);
+	m_defCharFormat.bCharSet = SHIFTJIS_CHARSET;
+	m_defCharFormat.dwMask |= CFM_CHARSET;
+
+	// Avoid to switch to latin font (Arial), when we begin to enter alpha-num characters
+	DWORD dwLangOptions = (DWORD)GetRichEditCtrl().SendMessage(EM_GETLANGOPTIONS);
+	dwLangOptions &= ~IMF_DUALFONT;
+	GetRichEditCtrl().SendMessage(EM_SETLANGOPTIONS, 0, dwLangOptions);
+
 	GetRichEditCtrl().GetParaFormat(m_defParaFormat);
 	m_defParaFormat.cTabCount = 0;
 
@@ -604,8 +614,8 @@ HRESULT CWordPadView::GetClipboardData(CHARRANGE* lpchrg, DWORD /*reco*/,
 	COleDataSource* pDataSource = new COleDataSource;
 
 	// put the formats into the data source
-	LPENUMFORMATETC lpEnumFormatEtc;
-	lpRichDataObj->EnumFormatEtc(DATADIR_SET, &lpEnumFormatEtc);
+	LPENUMFORMATETC lpEnumFormatEtc = NULL;
+	lpRichDataObj->EnumFormatEtc(DATADIR_GET, &lpEnumFormatEtc);
 	if (lpEnumFormatEtc != NULL)
 	{
 		FORMATETC etc;
@@ -841,11 +851,11 @@ BOOL CWordPadView::OnSetUserFont(UINT nID)
 	switch (nID)
 	{
 	case ID_MS_MINCHO_11PT:
-		fontName = _T("ÇlÇr ñæí©");
+		fontName = _T("Ôº≠Ôº≥ ÊòéÊúù");
 		fontSizeInPt = 11;
 		break;
 	case ID_MS_PGOTHIC_10PT:
-		fontName = _T("ÇlÇr ÇoÉSÉVÉbÉN");
+		fontName = _T("Ôº≠Ôº≥ Ôº∞„Ç¥„Ç∑„ÉÉ„ÇØ");
 		fontSizeInPt = 10;
 		break;
 	case ID_MS_UI_GOTHIC_10PT:

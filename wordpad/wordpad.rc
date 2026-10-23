@@ -621,7 +621,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
+ FILEVERSION 1,1,0,0
  PRODUCTVERSION 5,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -639,12 +639,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Microsoft Corporation"
             VALUE "FileDescription", "WordPad MFC Application"
-            VALUE "FileVersion", "1.0"
+            VALUE "FileVersion", "1.1.0.0"
             VALUE "InternalName", "wordpad"
-            VALUE "LegalCopyright", L"\251 Microsoft Corporation.  All rights reserved."
+            VALUE "LegalCopyright", "(c) Microsoft Corporation.  All rights reserved."
             VALUE "OriginalFilename", "WORDPAD.EXE"
             VALUE "ProductName", "Microsoft® Windows (TM) Operating System"
-            VALUE "ProductVersion", "5.0"
+            VALUE "ProductVersion", "5.0.0.0"
         END
     END
     BLOCK "VarFileInfo"

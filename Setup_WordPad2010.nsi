@@ -18,8 +18,20 @@
 !system 'MySign "${BINDIR32}\WordPad.exe" "${BINDIRAMD64}\WordPad.exe" "${BINDIRARM64}\WordPad.exe"'
 !finalize 'MySign "%1"'
 
+!system 'DefineAsmVer.exe "${BINDIR32}\WordPad.exe" "!define VER ""[FileVersion]"" " "!define F4VER ""[F4VER]"" " "!define LegalCopyright ""[LegalCopyright]"" " "!define FileDescription ""[FileDescription]"" " "!define FileVersion ""[FileVersion]"" " > Appver.tmp'
+!include "Appver.tmp"
+!searchreplace APV "${VER}" "." "_"
+
+; <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+
+VIProductVersion "${F4VER}"
+VIAddVersionKey FileDescription "${FileDescription}"
+VIAddVersionKey FileVersion "${FileVersion}"
+VIAddVersionKey LegalCopyright "${LegalCopyright}"
+VIAddVersionKey ProductVersion "${VER}"
+
 ; The name of the installer
-Name "${APP}"
+Name "${APP} v${VER}"
 
 ; The file to write
 OutFile "Setup_${APP}.exe"
